@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './RegistrationForm.css';
 
 function RegistrationForm() {
     const [studentData, setStudentData] = useState({
@@ -10,8 +11,43 @@ function RegistrationForm() {
         Semester: ''              // Podobnie jak wyżej
     });
 
+
+    const [errors, setErrors] = useState({});
+
+    const validate = () => {
+        let errors = {};
+    
+        // Walidacja numeru albumu
+        if (studentData.AlbumNumber.length < 3 || studentData.AlbumNumber.length > 7) {
+          errors.AlbumNumber = "Numer albumu powinien zawierać od 3 do 7 cyfr.";
+        }
+    
+        // Walidacja kierunku studiów
+        const validFieldsOfStudy = ["Informatyka", "Informatyka i Ekonometria"];
+        if (!validFieldsOfStudy.includes(studentData.FieldOfStudy)) {
+          errors.FieldOfStudy = "Wybierz Informatykę lub Informatykę i Ekonometrię.";
+        }
+    
+        // Walidacja roku studiów
+        const validYearNumbers = [1, 2, 3];
+        if (!validYearNumbers.includes(Number(studentData.YearNumber))) {
+          errors.YearNumber = "Rok studiów może być 1, 2 lub 3.";
+        }
+    
+        // Walidacja semestru
+        if (studentData.Semester < 1 || studentData.Semester > 7) {
+          errors.Semester = "Semestr powinien być w zakresie od 1 do 7.";
+        }
+    
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+      };
+
+      
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        if (!validate()) return;
 
         // Konwersja na liczby całkowite dla pól, które tego wymagają
         const dataToSend = {
@@ -37,23 +73,27 @@ function RegistrationForm() {
                 onChange={e => setStudentData({ ...studentData, AlbumNumber: e.target.value })}
                 placeholder="Numer albumu"
             />
+            {errors.AlbumNumber && <p className="error">{errors.AlbumNumber}</p>}
             <input
                 type="password"
                 value={studentData.StudentPasswordHash}
                 onChange={e => setStudentData({ ...studentData, StudentPasswordHash: e.target.value })}
                 placeholder="Hasło"
             />
+            {errors.FieldOfStudy && <p className="error">{errors.FieldOfStudy}</p>}
             <input
                 value={studentData.FieldOfStudy}
                 onChange={e => setStudentData({ ...studentData, FieldOfStudy: e.target.value })}
                 placeholder="Kierunek studiów"
             />
+            {errors.YearNumber && <p className="error">{errors.YearNumber}</p>}
             <input
                 type="number"
                 value={studentData.YearNumber}
                 onChange={e => setStudentData({ ...studentData, YearNumber: e.target.value })}
                 placeholder="Rok studiów"
             />
+            {errors.Semester && <p className="error">{errors.Semester}</p>}
             <input
                 type="number"
                 value={studentData.Semester}
