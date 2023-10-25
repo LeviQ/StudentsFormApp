@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './RegistrationForm.css';
 
+
 function RegistrationForm() {
     const [studentData, setStudentData] = useState({
         AlbumNumber: '',
@@ -67,41 +68,51 @@ function RegistrationForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input 
-                value={studentData.AlbumNumber}
-                onChange={e => setStudentData({ ...studentData, AlbumNumber: e.target.value })}
-                placeholder="Numer albumu"
-            />
-            {errors.AlbumNumber && <p className="error">{errors.AlbumNumber}</p>}
-            <input
-                type="password"
-                value={studentData.StudentPasswordHash}
-                onChange={e => setStudentData({ ...studentData, StudentPasswordHash: e.target.value })}
-                placeholder="Hasło"
-            />
-            {errors.FieldOfStudy && <p className="error">{errors.FieldOfStudy}</p>}
-            <input
-                value={studentData.FieldOfStudy}
-                onChange={e => setStudentData({ ...studentData, FieldOfStudy: e.target.value })}
-                placeholder="Kierunek studiów"
-            />
-            {errors.YearNumber && <p className="error">{errors.YearNumber}</p>}
-            <input
-                type="number"
-                value={studentData.YearNumber}
-                onChange={e => setStudentData({ ...studentData, YearNumber: e.target.value })}
-                placeholder="Rok studiów"
-            />
-            {errors.Semester && <p className="error">{errors.Semester}</p>}
-            <input
-                type="number"
-                value={studentData.Semester}
-                onChange={e => setStudentData({ ...studentData, Semester: e.target.value })}
-                placeholder="Semestr"
-            />
-            <button type="submit">Zarejestruj</button>
-        </form>
+        <div className="container">
+            <div className="image-container">
+                <img src='LeftImage.png' alt="Opis obrazka" />
+            </div>
+            <div className="signup-side">
+                <form onSubmit={handleSubmit}>
+                <h2>Zarejestruj Swoje Konto</h2>
+                <h1>Twoje zdanie ma znaczenie! Dołącz do naszej społeczności i wpływaj na życie akademickie.</h1>
+                    <input 
+                        value={studentData.AlbumNumber}
+                        onChange={e => setStudentData({ ...studentData, AlbumNumber: e.target.value })}
+                        placeholder="Numer albumu"
+                    />
+                    {errors.AlbumNumber && <p className="error">{errors.AlbumNumber}</p>}
+                    <input
+                        type="password"
+                        value={studentData.StudentPasswordHash}
+                        onChange={e => setStudentData({ ...studentData, StudentPasswordHash: e.target.value })}
+                        placeholder="Hasło"
+                    />
+                    <input
+                        value={studentData.FieldOfStudy}
+                        onChange={e => setStudentData({ ...studentData, FieldOfStudy: e.target.value })}
+                        placeholder="Kierunek studiów"
+                    />
+                    {errors.FieldOfStudy && <p className="error">{errors.FieldOfStudy}</p>}
+                    <input
+                        type="number"
+                        value={studentData.YearNumber}
+                        onChange={e => setStudentData({ ...studentData, YearNumber: e.target.value })}
+                        placeholder="Rok studiów"
+                    />
+                    {errors.YearNumber && <p className="error">{errors.YearNumber}</p>}
+                    <input
+                        type="number"
+                        value={studentData.Semester}
+                        onChange={e => setStudentData({ ...studentData, Semester: e.target.value })}
+                        placeholder="Semestr"
+                    />
+                    {errors.Semester && <p className="error">{errors.Semester}</p>}
+                    <h1>Posiadasz już konto? <a href="https://twojadomena.com/logowanie">Zaloguj się</a></h1>
+                    <button type="submit">Zarejestruj się</button>
+                </form>
+            </div>
+        </div>
     );
 }
 
