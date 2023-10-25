@@ -76,36 +76,41 @@ function RegistrationForm() {
                 <form onSubmit={handleSubmit}>
                 <h2>Zarejestruj Swoje Konto</h2>
                 <h1>Twoje zdanie ma znaczenie! Dołącz do naszej społeczności i wpływaj na życie akademickie.</h1>
+                <h3>Numer Albumu</h3>
                     <input 
                         value={studentData.AlbumNumber}
                         onChange={e => setStudentData({ ...studentData, AlbumNumber: e.target.value })}
-                        placeholder="Numer albumu"
+                        placeholder="Uzupełnij Numer albumu"
                     />
                     {errors.AlbumNumber && <p className="error">{errors.AlbumNumber}</p>}
+                    <h3>Hasło</h3>
                     <input
                         type="password"
                         value={studentData.StudentPasswordHash}
                         onChange={e => setStudentData({ ...studentData, StudentPasswordHash: e.target.value })}
-                        placeholder="Hasło"
+                        placeholder="Wpisz Hasło"
                     />
+                    <h3>Kierunek Studiów</h3>
                     <input
                         value={studentData.FieldOfStudy}
                         onChange={e => setStudentData({ ...studentData, FieldOfStudy: e.target.value })}
-                        placeholder="Kierunek studiów"
+                        placeholder="Uzupełnij Kierunek studiów"
                     />
                     {errors.FieldOfStudy && <p className="error">{errors.FieldOfStudy}</p>}
+                    <h3>Rok studiów</h3>
                     <input
                         type="number"
                         value={studentData.YearNumber}
                         onChange={e => setStudentData({ ...studentData, YearNumber: e.target.value })}
-                        placeholder="Rok studiów"
+                        placeholder="Wybierz Rok studiów"
                     />
                     {errors.YearNumber && <p className="error">{errors.YearNumber}</p>}
+                    <h3>Semestr</h3>
                     <input
                         type="number"
                         value={studentData.Semester}
                         onChange={e => setStudentData({ ...studentData, Semester: e.target.value })}
-                        placeholder="Semestr"
+                        placeholder="Wybierz Semestr"
                     />
                     {errors.Semester && <p className="error">{errors.Semester}</p>}
                     <h1>Posiadasz już konto? <a href="https://twojadomena.com/logowanie">Zaloguj się</a></h1>

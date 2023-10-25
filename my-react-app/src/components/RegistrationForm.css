@@ -1,16 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
-*{
+body{
     font-family: 'Open Sans', sans-serif;
+    background-image: url('backgroundd.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    
 }
 
 .container {
     display: flex;
-    border: 1px solid #e0e0e0;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 10px;
 }
 
 h2{
@@ -25,6 +29,13 @@ h1{
     color: #70919b;
     font-size: 1.05em;
     margin-bottom: 20px;
+    margin-left: 31px;
+}
+
+h3{
+    color: #2C3E50;
+    font-size: 1.05em;
+    margin-bottom: 5px;
     margin-left: 31px;
 }
 
@@ -51,7 +62,8 @@ h1{
     max-width: 300px;
     padding: 20px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    border-top-right-radius: 10px;     
+    border-bottom-right-radius: 10px;
     flex: 1;
     max-width: 50%;
 }
@@ -76,7 +88,8 @@ button:hover {
 
 
 input {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bold;
     height: 40px;
     padding-left: 45px;
     margin-bottom: 25px;
