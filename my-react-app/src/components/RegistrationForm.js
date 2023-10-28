@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './RegistrationForm.css';
 
@@ -14,6 +14,18 @@ function RegistrationForm() {
 
 
     const [errors, setErrors] = useState({});
+    const [registrationSuccess, setRegistrationSuccess] = useState(false);
+    const [duplicateAlbumError, setDuplicateAlbumError] = useState(false);
+
+    useEffect(() => {
+        if (registrationSuccess) {
+            const timeout = setTimeout(() => {
+                setRegistrationSuccess(false);
+            }, 5000);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [registrationSuccess]);
 
     const validate = () => {
         let errors = {};
@@ -50,7 +62,6 @@ function RegistrationForm() {
 
         if (!validate()) return;
 
-        // Konwersja na liczby całkowite dla pól, które tego wymagają
         const dataToSend = {
             ...studentData,
             YearNumber: parseInt(studentData.YearNumber),
@@ -60,14 +71,33 @@ function RegistrationForm() {
         axios.post('http://localhost:5007/api/Registration', dataToSend)
             .then(response => {
                 console.log(response.data);
-                // Tu możesz dodać jakąś akcję po pomyślnej rejestracji, np. przekierowanie czy komunikat
+                setRegistrationSuccess(true);
+                setTimeout(() => {
+                    setRegistrationSuccess(false);
+                }, 2000);
             })
             .catch(error => {
                 console.error("Błąd podczas rejestracji:", error);
+                if (error.response && error.response.data === "Student o podanym numerze albumu już istnieje.") { 
+                    setDuplicateAlbumError(true);
+                    setTimeout(() => {
+                        setDuplicateAlbumError(false);
+                    }, 2000);
+                }
             });
     };
 
     return (
+        <>
+        {registrationSuccess && 
+            <div className={`success-message ${registrationSuccess ? 'active' : ''}`}>
+                Pomyślnie zarejestrowano konto!
+            </div>}
+        {duplicateAlbumError &&
+        <div className={`error-message ${duplicateAlbumError ? 'active' : ''}`}>
+            Numer Albumu jest zajęty!
+        </div>
+    }
         <div className="container">
             <div className="image-container">
                 <img src='LeftImage.png' alt="Opis obrazka" />
@@ -118,6 +148,7 @@ function RegistrationForm() {
                 </form>
             </div>
         </div>
+        </>
     );
 }
 

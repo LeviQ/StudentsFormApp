@@ -70,20 +70,35 @@ h3{
 
 input[type="submit"],
 button {
-    background-color: #4CAF50; /* Zielony akcent */
-    color: white;
-    padding: 10px 15px;
-    width: 200px;
-    height: 50px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    color: #2C3E50;
+    background-color: #2ecc71; /* Zielony kolor tła */
     border: none;
-    border-radius: 5px;
+    padding: 12px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
     cursor: pointer;
-    margin-left: 130px;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.3s; /* Animacja przejścia */
+    margin-left: 155px;
 }
 
 input[type="submit"]:hover,
 button:hover {
-    background-color: #45a049; /* Ciemniejszy zielony dla efektu hover */
+    background-color: #27ae60; /* Ciemniejszy odcień zielonego */
+    transform: scale(1.05); /* Powiększenie przycisku */
+}
+
+
+
+input[type="submit"]:active,
+button:active {
+    background-color: #229954; /* Jeszcze ciemniejszy odcień zielonego */
+    transform: scale(1); /* Powrót do normalnej wielkości */
 }
 
 
@@ -126,3 +141,53 @@ a {
 a:hover {
     color: #4CAF50; /* Kolor tekstu po najechaniu */
 }
+
+@keyframes slideDown {
+    from {
+        transform: translateX(-50%) translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(4%);
+        opacity: 1;
+    }
+}
+
+.success-message {
+    position: fixed;
+    left: 50%; /* Wyśrodkowanie w poziomie */
+    transform: translateX(-50%) translateY(-50%); /* Dla dokładnego wyśrodkowania */
+    padding: 20px;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #4CAF50; /* Zielone tło */
+    color: #2C3E50; /* Biały tekst */
+    font-weight: bold;
+    font-size: 1.1em; 
+    border-radius: 8px; /* Zaokrąglone krawędzie */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Lekki cień dla efektu "uniesienia" */
+    z-index: 1000; /* Aby upewnić się, że komunikat jest na wierzchu */
+    max-width: 80%; /* Maksymalna szerokość, aby komunikat nie był zbyt szeroki */
+    text-align: center; /* Tekst wyśrodkowany w poziomie */
+}
+
+.error-message{
+    position: fixed;
+    left: 50%; /* Wyśrodkowanie w poziomie */
+    transform: translateX(-50%) translateY(-50%); /* Dla dokładnego wyśrodkowania */
+    padding: 20px;
+    font-family: 'Open Sans', sans-serif;
+    background-color: hsl(0, 39%, 49%); /* Zielone tło */
+    color: #2C3E50; /* Biały tekst */
+    font-weight: bold;
+    font-size: 1.4em; 
+    border-radius: 8px; /* Zaokrąglone krawędzie */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Lekki cień dla efektu "uniesienia" */
+    z-index: 1000; /* Aby upewnić się, że komunikat jest na wierzchu */
+    max-width: 80%; /* Maksymalna szerokość, aby komunikat nie był zbyt szeroki */
+    text-align: center; /* Tekst wyśrodkowany w poziomie */
+}
+
+.success-message.active, .error-message.active {
+    animation: slideDown 0.9s ease-out forwards; /* Pokaż komunikat w 1s z funkcją ease-out */
+}
+
