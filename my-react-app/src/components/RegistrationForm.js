@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './RegistrationForm.css';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 
 function RegistrationForm() {
@@ -17,6 +20,7 @@ function RegistrationForm() {
     const [registrationSuccess, setRegistrationSuccess] = useState(false); // Pomylsna rejestracja
     const [duplicateAlbumError, setDuplicateAlbumError] = useState(false); // Zajety numer albumu 
     const [isSubmitting, setIsSubmitting] = useState(false); // Zabezpieczenie autoklikanie 
+    const [isPasswordVisible, setPasswordVisibility] = useState(false); //Widocznosc hasła
 
     useEffect(() => {
         if (registrationSuccess) {
@@ -120,10 +124,16 @@ function RegistrationForm() {
                     {errors.AlbumNumber && <p className="error">{errors.AlbumNumber}</p>}
                     <h3>Hasło</h3>
                     <input
-                        type="password"
+                        type={isPasswordVisible ? "text" : "password"} 
                         value={studentData.StudentPasswordHash}
                         onChange={e => setStudentData({ ...studentData, StudentPasswordHash: e.target.value })}
                         placeholder="Wpisz Hasło"
+                    />
+                    <FontAwesomeIcon 
+                        icon={isPasswordVisible ? faEyeSlash : faEye} 
+                        onClick={() => setPasswordVisibility(!isPasswordVisible)} 
+                        style={{ cursor: "pointer", color: "#2C3E50", fontSize: "1.3em"}}
+                        className="eye-icon"
                     />
                     <h3>Kierunek Studiów</h3>
                     <input

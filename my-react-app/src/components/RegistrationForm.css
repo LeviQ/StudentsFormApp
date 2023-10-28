@@ -191,3 +191,10 @@ a:hover {
     animation: slideDown 0.9s ease-out forwards; /* Pokaż komunikat w 1s z funkcją ease-out */
 }
 
+.eye-icon {
+    position: absolute;
+    top: 40%;
+    right: 10%; /* odległość od prawej krawędzi inputu */
+    transform: translateY(-50%);
+}
+
