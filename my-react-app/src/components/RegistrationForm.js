@@ -14,8 +14,9 @@ function RegistrationForm() {
 
 
     const [errors, setErrors] = useState({});
-    const [registrationSuccess, setRegistrationSuccess] = useState(false);
-    const [duplicateAlbumError, setDuplicateAlbumError] = useState(false);
+    const [registrationSuccess, setRegistrationSuccess] = useState(false); // Pomylsna rejestracja
+    const [duplicateAlbumError, setDuplicateAlbumError] = useState(false); // Zajety numer albumu 
+    const [isSubmitting, setIsSubmitting] = useState(false); // Zabezpieczenie autoklikanie 
 
     useEffect(() => {
         if (registrationSuccess) {
@@ -62,6 +63,8 @@ function RegistrationForm() {
 
         if (!validate()) return;
 
+        setIsSubmitting(true);
+
         const dataToSend = {
             ...studentData,
             YearNumber: parseInt(studentData.YearNumber),
@@ -74,6 +77,7 @@ function RegistrationForm() {
                 setRegistrationSuccess(true);
                 setTimeout(() => {
                     setRegistrationSuccess(false);
+                    setIsSubmitting(false);
                 }, 2000);
             })
             .catch(error => {
@@ -82,6 +86,7 @@ function RegistrationForm() {
                     setDuplicateAlbumError(true);
                     setTimeout(() => {
                         setDuplicateAlbumError(false);
+                        setIsSubmitting(false);
                     }, 2000);
                 }
             });
@@ -144,7 +149,7 @@ function RegistrationForm() {
                     />
                     {errors.Semester && <p className="error">{errors.Semester}</p>}
                     <h1>Posiadasz już konto? <a href="https://twojadomena.com/logowanie">Zaloguj się</a></h1>
-                    <button type="submit">Zarejestruj się</button>
+                    <button type="submit" disabled={isSubmitting}>Zarejestruj się</button>
                 </form>
             </div>
         </div>
