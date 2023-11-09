@@ -6,6 +6,9 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Security.Cryptography;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace StudentsFormApp.Controllers
 {
@@ -14,43 +17,61 @@ namespace StudentsFormApp.Controllers
     public class LoginController : ControllerBase
     {
         private readonly StudentContext _context;
+        private readonly IConfiguration _configuration;
 
-        public LoginController(StudentContext context)
+        public LoginController(StudentContext context, IConfiguration configuration )
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginRequest loginRequest)
+        public async Task<IActionResult> Login(StudentLoginRequest loginRequest)
         {
             if (ModelState.IsValid)
             {
-                // Wyszukaj studenta na podstawie podanego numeru albumu
-                var student = await _context.Students.FirstOrDefaultAsync(s => s.AlbumNumber == loginRequest.AlbumNumber);
+                // Hashowanie hasła przesłanego przez studenta
+                var hashedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(loginRequest.Password)));
 
-                if (student == null)
+                // Wyszukanie studenta w bazie danych po numerze albumu i hashowanym haśle
+                var student = await _context.Students.FirstOrDefaultAsync(s => s.AlbumNumber == loginRequest.AlbumNumber && s.StudentPasswordHash == hashedPassword);
+
+                if (student != null)
                 {
-                    return BadRequest("Niepoprawny numer albumu lub hasło.");
+                    var jwtSettings = _configuration.GetSection("JwtSettings");
+                    var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(new Claim[]
+                        {
+                    new Claim(ClaimTypes.Name, student.AlbumNumber.ToString())
+                            // możesz dodać więcej claimów, jeśli chcesz
+                        }),
+                        Expires = DateTime.UtcNow.AddDays(1), // Token wygasa po 1 dniu, możesz dostosować
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                        Issuer = jwtSettings["Issuer"],
+                        Audience = jwtSettings["Audience"]
+                    };
+
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+
+                    return Ok(new { Token = tokenString, Message = "Zalogowano pomyślnie." }); 
                 }
-
-                // Sprawdzenie hasła
-                var hashedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(loginRequest.StudentPasswordHash)));
-
-                if (student.StudentPasswordHash != hashedPassword)
+                else
                 {
-                    return BadRequest("Niepoprawny numer albumu lub hasło.");
+                    return Unauthorized("Niepoprawny numer albumu lub hasło.");
                 }
-
-                // W tym miejscu logowanie przebiegło pomyślnie, możesz zwrócić np. token JWT lub cokolwiek innego
-                return Ok("Logowanie pomyślne.");
             }
             return BadRequest("Niepoprawne dane.");
         }
     }
 
-    public class LoginRequest
+    public class StudentLoginRequest
     {
         public int AlbumNumber { get; set; }
-        public string StudentPasswordHash { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 }

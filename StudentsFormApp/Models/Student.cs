@@ -11,8 +11,8 @@ namespace StudentsFormApp
         public int AlbumNumber { get; set; }
         public string StudentPasswordHash { get; set; } = string.Empty;
         public string FieldOfStudy { get; set; } = string.Empty;
-        public uint YearNumber { get; set; }
-        public uint Semester { get; set; }
+        public int YearNumber { get; set; }
+        public int Semester { get; set; }
 
     }
 }
