@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,13 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore).AddNewtonsoftJson(
     options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
 
+builder.Services.AddDbContext<StudentContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("StudentFormAppCon")));
+
 var app = builder.Build();
+
+//Enable CORS
+app.UseCors(c => c.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
