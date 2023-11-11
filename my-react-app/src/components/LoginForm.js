@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './RegistrationForm.css'; // Załóżmy, że masz już odpowiednie style CSS
+import './RegistrationForm.css';
 
 function LoginForm() {
     const [loginData, setLoginData] = useState({
@@ -10,6 +10,7 @@ function LoginForm() {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [loginSuccess, setLoginSuccess] = useState(false);
 
     const handleInputChange = (e) => {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -21,26 +22,39 @@ function LoginForm() {
         try {
             const response = await axios.post('http://localhost:5007/api/Login', loginData);
             console.log(response.data);
-            // Zapisz token w localStorage lub w stanie globalnym aplikacji
-            localStorage.setItem('token', response.data.token); // Przykładowe zapisanie tokenu
-            // Przekieruj na stronę główną lub dashboard
-            navigate('/home'); // Przykładowa ścieżka do strony głównej
+            localStorage.setItem('token', response.data.token); 
+            setLoginSuccess(true);
+            setTimeout(() => { 
+                navigate('/home');
+            }, 1500); 
         } catch (err) {
-            setError('Nieudane logowanie. Spróbuj ponownie.');
+            if (err.response) {
+                if (err.response.data === 'Wprowadzono niepoprawne hasło.') {
+                    setError('Wprowadzono niepoprawne hasło.');}
+                if (err.response.data === 'Wprowadź poprawny numer albumu.') {
+                    setError('Wprowadź poprawny numer albumu.');}
+            }
+            else {
+                setError('Wystąpił błąd. Spróbuj ponownie później.');
+            }
             console.error(err);
         }
     };
 
     return (
+        <>
+        {loginSuccess && 
+            <div className={`success-message ${loginSuccess ? 'active' : ''}`}>
+                Zalogowano Pomyślnie!
+            </div>}
         <div className='container'>
             <div className="image-container">
                 <img src='LeftImage2.png' alt="Opis obrazka" />
-            </div>
+        </div>
         <div className="signup-side">
             <form onSubmit={handleSubmit} className="login-form">
                 <h5>Zaloguj się na konto!</h5>
                 <h4><em>"Oświata jest rodzajem ciągłego dialogu, a dialog jest jedną z najlepszych form nauczania."</em> ~ <b>Plato</b></h4>
-                {error && <p className="error">{error}</p>}
                 <div className="form-group">
                     <h3>Numer Albumu</h3>
                     <input
@@ -48,6 +62,7 @@ function LoginForm() {
                         name="AlbumNumber"
                         value={loginData.AlbumNumber}
                         onChange={handleInputChange}
+                        placeholder="Wprowadź Numer Albumu"
                         required
                     />
                 </div>
@@ -58,14 +73,17 @@ function LoginForm() {
                         name="Password"
                         value={loginData.Password}
                         onChange={handleInputChange}
+                        placeholder="Wprowadź Hasło"
                         required
                     />
                 </div>
+                {error && <p className="error">{error}</p>}
                 <h1>Nie masz swojego konta? <a href="/">Zarejestruj się!</a></h1>
                 <button type="submit" className="login-button">Zaloguj się</button>
             </form>
         </div>
         </div>
+        </>
     );
 }
 

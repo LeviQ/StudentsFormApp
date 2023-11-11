@@ -9,10 +9,10 @@ import { useNavigate } from 'react-router-dom';
 function RegistrationForm() {
     const [studentData, setStudentData] = useState({
         AlbumNumber: '',
-        StudentPasswordHash: '',  // Sugeruję zastosowanie nazwy 'Password' zamiast 'StudentPasswordHash', ale to zależy od Twojego backendu
+        StudentPasswordHash: '',  
         FieldOfStudy: '',
-        YearNumber: '',           // Zmieniłem wartość początkową na pusty ciąg, zamiast 0
-        Semester: ''              // Podobnie jak wyżej
+        YearNumber: '',           
+        Semester: ''              
     });
 
     const [errors, setErrors] = useState({});
@@ -83,7 +83,7 @@ function RegistrationForm() {
                     setRegistrationSuccess(false);
                     setIsSubmitting(false);
                     navigate('/login'); // Tutaj dodajemy przekierowanie do logowania
-                }, 2500); // Czekamy 3 sekundy przed przekierowaniem
+                }, 2500); 
             })
             .catch(error => {
                 console.error("Błąd podczas rejestracji:", error);

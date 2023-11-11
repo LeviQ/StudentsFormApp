@@ -62,7 +62,14 @@ namespace StudentsFormApp.Controllers
                 }
                 else
                 {
-                    return Unauthorized("Niepoprawny numer albumu lub hasło.");
+                    if (await _context.Students.AnyAsync(s => s.AlbumNumber == loginRequest.AlbumNumber))
+                    {
+                        if (await _context.Students.AnyAsync(s => s.StudentPasswordHash != hashedPassword))
+                        {
+                            return Unauthorized("Wprowadzono niepoprawne hasło.");
+                        }
+                    }
+                    return Unauthorized("Wprowadź poprawny numer albumu.");
                 }
             }
             return BadRequest("Niepoprawne dane.");
