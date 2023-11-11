@@ -3,7 +3,7 @@ import axios from 'axios';
 import './RegistrationForm.css';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { useNavigate } from 'react-router-dom';
 
 
 function RegistrationForm() {
@@ -15,12 +15,12 @@ function RegistrationForm() {
         Semester: ''              // Podobnie jak wyżej
     });
 
-
     const [errors, setErrors] = useState({});
     const [registrationSuccess, setRegistrationSuccess] = useState(false); // Pomylsna rejestracja
     const [duplicateAlbumError, setDuplicateAlbumError] = useState(false); // Zajety numer albumu 
     const [isSubmitting, setIsSubmitting] = useState(false); // Zabezpieczenie autoklikanie 
     const [isPasswordVisible, setPasswordVisibility] = useState(false); //Widocznosc hasła
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (registrationSuccess) {
@@ -82,7 +82,8 @@ function RegistrationForm() {
                 setTimeout(() => {
                     setRegistrationSuccess(false);
                     setIsSubmitting(false);
-                }, 2000);
+                    navigate('/login'); // Tutaj dodajemy przekierowanie do logowania
+                }, 2500); // Czekamy 3 sekundy przed przekierowaniem
             })
             .catch(error => {
                 console.error("Błąd podczas rejestracji:", error);
@@ -158,7 +159,7 @@ function RegistrationForm() {
                         placeholder="Wybierz Semestr"
                     />
                     {errors.Semester && <p className="error">{errors.Semester}</p>}
-                    <h1>Posiadasz już konto? <a href="https://twojadomena.com/logowanie">Zaloguj się</a></h1>
+                    <h1>Posiadasz już konto? <a href="/login">Zaloguj się</a></h1>
                     <button type="submit" disabled={isSubmitting}>Zarejestruj się</button>
                 </form>
             </div>
