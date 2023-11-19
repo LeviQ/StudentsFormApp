@@ -41,13 +41,16 @@ namespace StudentsFormApp.Controllers
                     var jwtSettings = _configuration.GetSection("JwtSettings");
                     var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
 
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name, student.AlbumNumber.ToString()),
+                        new Claim("FieldOfStudy", student.FieldOfStudy), 
+                        new Claim("Semester", student.Semester.ToString()) 
+                    };
+
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
-                        Subject = new ClaimsIdentity(new Claim[]
-                        {
-                    new Claim(ClaimTypes.Name, student.AlbumNumber.ToString())
-                            // możesz dodać więcej claimów, jeśli chcesz
-                        }),
+                        Subject = new ClaimsIdentity(claims),
                         Expires = DateTime.UtcNow.AddDays(1), // Token wygasa po 1 dniu, możesz dostosować
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                         Issuer = jwtSettings["Issuer"],

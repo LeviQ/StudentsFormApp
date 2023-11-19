@@ -11,7 +11,7 @@ function RegistrationForm() {
         AlbumNumber: '',
         StudentPasswordHash: '',  
         FieldOfStudy: '',
-        YearNumber: '',           
+        GroupName: '',           
         Semester: ''              
     });
 
@@ -47,9 +47,9 @@ function RegistrationForm() {
         }
     
         // Walidacja roku studiów
-        const validYearNumbers = [1, 2, 3];
-        if (!validYearNumbers.includes(Number(studentData.YearNumber))) {
-          errors.YearNumber = "Rok studiów może być 1, 2 lub 3.";
+        const validGroupNames = ["1","2","3","4","5","6","7","ISI-1","ISI-2","SIAG","TM"];
+        if (!validGroupNames.includes(studentData.GroupName)) {
+          errors.GroupName = "Wpisz poprawną Grupę Studencką";
         }
     
         // Walidacja semestru
@@ -143,14 +143,14 @@ function RegistrationForm() {
                         placeholder="Uzupełnij Kierunek studiów"
                     />
                     {errors.FieldOfStudy && <p className="error">{errors.FieldOfStudy}</p>}
-                    <h3>Rok studiów</h3>
+                    <h3>Grupa Studencka</h3>
                     <input
-                        type="number"
-                        value={studentData.YearNumber}
-                        onChange={e => setStudentData({ ...studentData, YearNumber: e.target.value })}
-                        placeholder="Wybierz Rok studiów"
+                        type="text"
+                        value={studentData.GroupName}
+                        onChange={e => setStudentData({ ...studentData, GroupName: e.target.value })}
+                        placeholder="Wpisz Grupę Studencką"
                     />
-                    {errors.YearNumber && <p className="error">{errors.YearNumber}</p>}
+                    {errors.GroupName && <p className="error">{errors.GroupName}</p>}
                     <h3>Semestr</h3>
                     <input
                         type="number"

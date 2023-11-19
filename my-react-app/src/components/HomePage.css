@@ -1,0 +1,28 @@
+
+.HomePage{
+    font-family: 'Open Sans', sans-serif;
+    background-color: #ACE1AF;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.home-container{
+    .logoutButton {
+        padding: 10px 20px;
+        background-color: #f44336; /* czerwony kolor tła */
+        color: white; /* biały tekst */
+        border: none; /* brak obramowania */
+        border-radius: 5px; /* zaokrąglone rogi */
+        cursor: pointer; /* kursor w kształcie ręki */
+        font-size: 16px; /* rozmiar czcionki */
+      }
+      
+      .logoutButton:hover {
+        background-color: #d32f2f; /* ciemniejszy czerwony kolor tła przy najechaniu */
+      }
+}

@@ -9,6 +9,15 @@ using System.Security.Cryptography;
 
 namespace StudentsFormApp.Controllers
 {
+    public class StudentRegistrationDto
+    {
+        public int AlbumNumber { get; set; }
+        public string StudentPassword { get; set; } = string.Empty;
+        public string FieldOfStudy { get; set; } = string.Empty;
+        public int Semester { get; set; }
+        public string GroupName { get; set; } = string.Empty;
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class RegistrationController : ControllerBase
@@ -21,20 +30,35 @@ namespace StudentsFormApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(Student student)
+        public async Task<IActionResult> Register(StudentRegistrationDto registrationDto)
         {
             if (ModelState.IsValid)
             {
-                // Sprawdzenie, czy student o podanym numerze albumu już istnieje
-                if (await _context.Students.AnyAsync(s => s.AlbumNumber == student.AlbumNumber))
+                var existingStudent = await _context.Students
+                    .AnyAsync(s => s.AlbumNumber == registrationDto.AlbumNumber);
+                if (existingStudent)
                 {
                     return BadRequest("Student o podanym numerze albumu już istnieje.");
                 }
 
-                // Hashowanie hasła (nigdy nie przechowuj hasła w postaci jawnej!)
-                student.StudentPasswordHash = Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(student.StudentPasswordHash)));
+                var group = await _context.StudentGroups
+                    .FirstOrDefaultAsync(g => g.GroupName == registrationDto.GroupName);
+                if (group == null)
+                {
+                    return BadRequest("Podana grupa studencka nie istnieje.");
+                }
 
-                // Zapisanie studenta w bazie danych
+                var hashedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(registrationDto.StudentPassword)));
+
+                var student = new Student
+                {
+                    AlbumNumber = registrationDto.AlbumNumber,
+                    StudentPasswordHash = hashedPassword,
+                    FieldOfStudy = registrationDto.FieldOfStudy,
+                    Semester = registrationDto.Semester,
+                    GroupID = group.GroupID
+                };
+
                 _context.Students.Add(student);
                 await _context.SaveChangesAsync();
 
