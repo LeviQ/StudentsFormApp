@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 function RegistrationForm() {
     const [studentData, setStudentData] = useState({
         AlbumNumber: '',
-        StudentPasswordHash: '',  
+        StudentPassword: '',  
         FieldOfStudy: '',
         GroupName: '',           
         Semester: ''              
@@ -125,8 +125,8 @@ function RegistrationForm() {
                     <h3>Hasło</h3>
                     <input
                         type={isPasswordVisible ? "text" : "password"} 
-                        value={studentData.StudentPasswordHash}
-                        onChange={e => setStudentData({ ...studentData, StudentPasswordHash: e.target.value })}
+                        value={studentData.StudentPassword}
+                        onChange={e => setStudentData({ ...studentData, StudentPassword: e.target.value })}
                         placeholder="Wpisz Hasło"
                     />
                     <FontAwesomeIcon 
