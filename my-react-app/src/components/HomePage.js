@@ -13,9 +13,9 @@ function Home() {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          const response = await axios.get('http://localhost:5007/api/Surveys', {
+          const response = await axios.get('http://localhost:5007/api/Surveys/GetSurveys', {
             headers: {
-              Authorization: `Bearer ${token}`
+              Authorization: `Bearer ${token}`,
             }
           });
           setSurveys(response.data);
@@ -43,10 +43,10 @@ function Home() {
       {/* Mapowanie stanu 'surveys' na kafelki */}
       {surveys.length > 0 ? (
         surveys.map((survey) => (
-          <div key={survey.SurveyID} className="survey-card">
+          <div key={survey.OfferingID} className="survey-card">
             <h2>{survey.SubjectName}</h2>
-            <p>Rodzaj zajęć: {survey.ClassType}</p>
-            <p>Prowadzący: {survey.Instructor}</p>
+            <p>Rodzaj zajęć: {survey.ClassTypeName}</p>
+            <p>Prowadzący: {survey.InstructorTitle} {survey.InstructorName}</p>
             {/* Przycisk do wypełnienia ankiety może być dodany tutaj, jeśli jest potrzebny */}
             <button className="fill-survey-button">Wypełnij ankietę</button>
           </div>

@@ -18,11 +18,12 @@ function LoginForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setError('');
 
         try {
             const response = await axios.post('http://localhost:5007/api/Login', loginData);
             console.log(response.data);
-            localStorage.setItem('token', response.data.token); 
+            localStorage.setItem('token', response.data.Token); 
             setLoginSuccess(true);
             setTimeout(() => { 
                 navigate('/home');

@@ -30,10 +30,9 @@ namespace StudentsFormApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Hashowanie hasła przesłanego przez studenta
                 var hashedPassword = Convert.ToBase64String(SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(loginRequest.Password)));
 
-                // Wyszukanie studenta w bazie danych po numerze albumu i hashowanym haśle
+                //Wyszukanie studenta w bazie danych po numerze albumu i hashowanym haśle
                 var student = await _context.Students.FirstOrDefaultAsync(s => s.AlbumNumber == loginRequest.AlbumNumber && s.StudentPasswordHash == hashedPassword);
 
                 if (student != null)
@@ -43,15 +42,17 @@ namespace StudentsFormApp.Controllers
 
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, student.AlbumNumber.ToString()),
-                        new Claim("FieldOfStudy", student.FieldOfStudy), 
-                        new Claim("Semester", student.Semester.ToString()) 
+                        new Claim("ID", student.ID.ToString()),
+                        new Claim("AlbumNumber", student.AlbumNumber.ToString()),
+                        new Claim("FieldOfStudy", student.FieldOfStudy),
+                        new Claim("GroupID", student.GroupID.ToString()),
+                        new Claim("Semester", student.Semester.ToString())
                     };
 
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(claims),
-                        Expires = DateTime.UtcNow.AddDays(1), // Token wygasa po 1 dniu, możesz dostosować
+                        Expires = DateTime.UtcNow.AddDays(1), // Token wygasa po 1 dniu
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                         Issuer = jwtSettings["Issuer"],
                         Audience = jwtSettings["Audience"]

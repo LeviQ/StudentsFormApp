@@ -71,7 +71,6 @@ function RegistrationForm() {
 
         const dataToSend = {
             ...studentData,
-            YearNumber: parseInt(studentData.YearNumber),
             Semester: parseInt(studentData.Semester)
         };
 

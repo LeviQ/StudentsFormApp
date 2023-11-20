@@ -21,7 +21,7 @@ builder.Services.AddDbContext<StudentContext>(options =>
 var app = builder.Build();
 
 //Enable CORS
-app.UseCors(c => c.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+app.UseCors(c => c.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod().SetIsOriginAllowed(origin => true));
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
