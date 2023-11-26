@@ -67,7 +67,7 @@ namespace StudentsFormApp.Controllers
                     return NotFound("Student not found.");
                 }
 
-                var surveys = await _context.CourseOfferings
+                var surveysForSpecificGroup = await _context.CourseOfferings
                     .Where(co =>
                                  co.Semester == student.Semester &&
                                  co.GroupID == student.GroupID)
@@ -82,7 +82,51 @@ namespace StudentsFormApp.Controllers
                         Semester = co.Semester
                     }).ToListAsync();
 
-                return Ok(surveys);
+
+                var surveysForAllStudents = await _context.CourseOfferings
+                    .Where(co =>
+                                 co.Semester == student.Semester &&
+                                 co.GroupID == 14)
+                    .Select(co => new SurveyDto
+                    {
+                        OfferingID = co.OfferingID,
+                        SubjectName = co.Subject.SubjectName,
+                        InstructorTitle = co.Instructor.Title,
+                        InstructorName = co.Instructor.Name,
+                        ClassTypeName = co.ClassType.TypeName,
+                        GroupName = co.Group.GroupName,
+                        Semester = co.Semester
+                    }).ToListAsync();
+
+                var combinedSurveys = surveysForSpecificGroup.Concat(surveysForAllStudents).ToList();
+
+
+                var additionalSurveys = new List<SurveyDto>();
+                if (student.GroupID == 8 || student.GroupID == 9 || student.GroupID == 10)
+                {
+                         additionalSurveys = await _context.CourseOfferings
+                        .Where(co => co.Semester == student.Semester &&
+                                     co.GroupID == 13)
+                        .Select(co => new SurveyDto
+                        {
+                            OfferingID = co.OfferingID,
+                            SubjectName = co.Subject.SubjectName,
+                            InstructorTitle = co.Instructor.Title,
+                            InstructorName = co.Instructor.Name,
+                            ClassTypeName = co.ClassType.TypeName,
+                            GroupName = co.Group.GroupName,
+                            Semester = co.Semester
+                        }).ToListAsync();
+
+                }
+                    var finalSurveys = surveysForSpecificGroup
+                    .Concat(surveysForAllStudents)
+                    .Concat(additionalSurveys)
+                    .GroupBy(s => s.OfferingID)
+                    .Select(g => g.First())
+                    .ToList();
+
+                return Ok(finalSurveys);
             }
             catch ( Exception ex )
             {
