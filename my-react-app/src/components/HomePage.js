@@ -35,18 +35,22 @@ function Home() {
   };
 
   return (
-    <div className="surveys-container">
-      <h1>Ankiety</h1>
+    <div className='Page-container'>
+      <div className='Header'>
+        Witaj na Platformie Ankiet Studenckich!
       <button onClick={handleLogout} className="logoutButton">
         Wyloguj się
       </button>
+      </div>
+    <div className="surveys-container">
+      
       {/* Mapowanie stanu 'surveys' na kafelki */}
       {surveys.length > 0 ? (
         surveys.map((survey) => (
           <div key={survey.OfferingID} className="survey-card">
             <h2>{survey.SubjectName}</h2>
-            <p>Rodzaj zajęć: {survey.ClassTypeName}</p>
-            <p>Prowadzący: {survey.InstructorTitle} {survey.InstructorName}</p>
+            <p><em>Rodzaj zajęć: </em><strong>{survey.ClassTypeName}</strong></p>
+            <p><em>Prowadzący: </em><strong> {survey.InstructorTitle} {survey.InstructorName}</strong></p>
             {/* Przycisk do wypełnienia ankiety może być dodany tutaj, jeśli jest potrzebny */}
             <button className="fill-survey-button">Wypełnij ankietę</button>
           </div>
@@ -54,6 +58,7 @@ function Home() {
       ) : (
         <p>Brak ankiet do wypełnienia.</p>
       )}
+    </div>
     </div>
   );
 }

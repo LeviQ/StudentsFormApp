@@ -48,6 +48,7 @@ function LoginForm() {
             <div className={`success-message ${loginSuccess ? 'active' : ''}`}>
                 Zalogowano Pomyślnie!
             </div>}
+        <div className='PP'>
         <div className='container'>
             <div className="image-container">
                 <img src='LeftImage2.png' alt="Opis obrazka" />
@@ -82,6 +83,7 @@ function LoginForm() {
                 <h1>Nie masz swojego konta? <a href="/">Zarejestruj się!</a></h1>
                 <button type="submit" className="login-button">Zaloguj się</button>
             </form>
+        </div>
         </div>
         </div>
         </>

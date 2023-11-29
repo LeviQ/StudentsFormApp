@@ -107,6 +107,7 @@ function RegistrationForm() {
             Numer Albumu jest zajęty!
         </div>
     }
+    <div className='PP'>
         <div className="container">
             <div className="image-container">
                 <img src='LeftImage.png' alt="Opis obrazka" />
@@ -163,7 +164,8 @@ function RegistrationForm() {
                 </form>
             </div>
         </div>
-        </>
+        </div>
+      </>
     );
 }
 
