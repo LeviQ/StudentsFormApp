@@ -54,7 +54,7 @@ body{
 
 .surveys-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Three tiles per row */
+  grid-template-columns: repeat(3, 1fr); 
   gap: 20px;
   padding: 40px;
   margin: 40px;
@@ -101,7 +101,7 @@ body{
   margin-left: 150px;
 }
 
-/* Add some responsiveness to the cards */
+
 @media (max-width: 768px) {
   .surveys-container {
     grid-template-columns: 1fr;
@@ -173,12 +173,12 @@ input[type="radio"] {
 }
 
 .form-question label {
-  margin-right: 10px; /* Dostosuj odstęp według potrzeb */
+  margin-right: 10px; 
 }
 
 textarea {
   margin-top: 10px;
-  resize: vertical; /* Allow only vertical resize */
+  resize: vertical; 
   height: 100px;
   min-height: 100px;
   max-height: 110px;

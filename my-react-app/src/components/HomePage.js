@@ -57,8 +57,7 @@ function Home() {
       </button>
       </div>
     <div className="surveys-container">
-      
-      {/* Mapowanie stanu 'surveys' na kafelki */}
+    
       {surveys.length > 0 ? (
         surveys.map((survey) => (
           <div key={survey.OfferingID} className="survey-card">
