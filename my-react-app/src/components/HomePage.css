@@ -40,9 +40,16 @@ body{
   background-color: #f44336; 
   border: none;
   border-radius: 5px;
-  color: white;
   cursor: pointer;
   font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  color: White;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s, transform 0.3s;
+  width: 8%;
 }
 
 .surveys-container {
@@ -77,14 +84,21 @@ body{
 }
 
 .fill-survey-button {
-  background-color: #008CBA; /* Blue color for the fill survey button */
-  color: white;
+  background-color: #008CBA; 
   border: none;
   padding: 10px 15px;
-  margin-top: 15px;
+  margin-top: 20px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+  transition: background-color 0.3s, transform 0.3s;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  width: 40%; 
+  margin-left: 150px;
 }
 
 /* Add some responsiveness to the cards */
@@ -93,3 +107,127 @@ body{
     grid-template-columns: 1fr;
   }
 }
+
+.Page-container.blur {
+  filter: blur(0px);
+}
+
+.modal {
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: -55px;
+  width: 100%;
+  
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 3% auto;
+  height: 80%;
+  padding: 15px;
+  border: 2px solid #5d755d;
+  border-radius: 10px;
+  width: 80%;
+}
+
+.close {
+  color: grey;
+  float: right;
+  font-size: 38px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-top: 10px;
+}
+
+input[type="radio"] {
+  margin-right: 15px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.form-question {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.form-question label {
+  margin-right: 10px; /* Dostosuj odstęp według potrzeb */
+}
+
+textarea {
+  margin-top: 10px;
+  resize: vertical; /* Allow only vertical resize */
+  height: 100px;
+  min-height: 100px;
+  max-height: 110px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.Questionn{
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  margin-left: 15px;
+  font-size: 14pt;
+}
+
+.radio-button-label span {
+  pointer-events: none; 
+}
+
+.radio-button-label{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: -14px;
+}
+
+.radio-label{
+  margin-left: 15px;
+  margin-bottom: -10px;
+  font-weight: bold;
+}
+
+.s2{
+  margin: auto;
+  width: 20%;
+  background-color: #0075ff; 
+  border: none;
+  padding: 10px 15px;
+  margin-top: 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s, transform 0.3s;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
+
+
+
+

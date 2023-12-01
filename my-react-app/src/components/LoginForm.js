@@ -81,7 +81,7 @@ function LoginForm() {
                 </div>
                 {error && <p className="error">{error}</p>}
                 <h1>Nie masz swojego konta? <a href="/">Zarejestruj się!</a></h1>
-                <button type="submit" className="login-button">Zaloguj się</button>
+                <button type="submit" className="Registration">Zaloguj się</button>
             </form>
         </div>
         </div>

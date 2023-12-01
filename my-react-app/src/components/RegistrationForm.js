@@ -160,7 +160,7 @@ function RegistrationForm() {
                     />
                     {errors.Semester && <p className="error">{errors.Semester}</p>}
                     <h1>Posiadasz już konto? <a href="/login">Zaloguj się</a></h1>
-                    <button type="submit" disabled={isSubmitting}>Zarejestruj się</button>
+                    <button type="submit" className='Registration' disabled={isSubmitting}>Zarejestruj się</button>
                 </form>
             </div>
         </div>

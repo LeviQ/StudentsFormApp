@@ -92,8 +92,7 @@ h5{
     max-width: 50%;
 }
 
-input[type="submit"],
-button {
+.Registration {
     font-family: 'Open Sans', sans-serif;
     font-weight: bold;
     color: #2C3E50;
@@ -107,8 +106,9 @@ button {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 4px;
-    transition: background-color 0.3s, transform 0.3s; 
-    margin-left: 155px;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 75%; 
+    margin-left: 45px;
 }
 
 input[type="submit"]:hover,
