@@ -59,14 +59,19 @@ namespace StudentsFormApp.Controllers
 
                 var student = await _context.Students.FindAsync(int.Parse(studentId));
 
-                // Jeśli student nie został znaleziony, zwróć błąd
                 if (student == null)
                 {
                     return NotFound("Student not found.");
                 }
 
+                var answeredSurveyIds = await _context.SurveyResponses  // Filtr ankiet, Szukamy odpowiedzi, dla konkretnego numeru albumu 
+                .Where(sr => sr.AlbumNumber == student.AlbumNumber)
+                .Select(sr => sr.OfferingID)
+                .ToListAsync();
+
                 var surveys = await _context.CourseOfferings
                     .Where(co => co.Semester == student.Semester &&
+                            !answeredSurveyIds.Contains(co.OfferingID) &&  //Filtr ankiet, na które została już udzielona odpowiedź 
                             (co.GroupID == student.GroupID ||
                             co.GroupID == 14 ||
                             (student.GroupID == 8 && co.GroupID == 13) ||
