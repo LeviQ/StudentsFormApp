@@ -50,8 +50,6 @@ namespace StudentsFormApp.Controllers
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false
-
-
                 },
                 out SecurityToken validatedtoken
                 );

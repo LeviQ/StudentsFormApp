@@ -228,6 +228,16 @@ textarea {
   display: inline-block;
 }
 
+.success-message2 {
+  color: green;
+  background-color: #D4EDDA;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid green;
+  border-radius: 5px;
+  text-align: center;
+}
+
 
 
 

@@ -11,6 +11,7 @@ public class StudentContext : DbContext
     public DbSet<ClassType> ClassTypes { get; set; }
     public DbSet<Subject> Subjects { get; set; }
     public DbSet<CourseOffering> CourseOfferings { get; set; }
+    public DbSet<SurveyResponse> SurveyResponses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
