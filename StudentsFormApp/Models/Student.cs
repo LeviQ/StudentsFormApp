@@ -15,7 +15,8 @@ namespace StudentsFormApp
         public string StudentPasswordHash { get; set; } = string.Empty;
         public string FieldOfStudy { get; set; } = string.Empty;
         public int Semester { get; set; }
-        public int GroupID { get; set; } 
+        public int GroupID { get; set; }
+        public string IsSuperUser { get; set; } = "No";
 
         public virtual StudentGroup? Group { get; set; }
 

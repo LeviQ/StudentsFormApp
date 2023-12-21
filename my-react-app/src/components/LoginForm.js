@@ -26,7 +26,11 @@ function LoginForm() {
             localStorage.setItem('token', response.data.Token); 
             setLoginSuccess(true);
             setTimeout(() => { 
-                navigate('/home');
+                if (response.data.IsSuperUser === 'Yes') {
+                    navigate('/admin');
+                  } else {
+                    navigate('/home');
+                  }
             }, 1500); 
         } catch (err) {
             if (err.response) {

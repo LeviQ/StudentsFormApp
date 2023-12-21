@@ -21,7 +21,6 @@ namespace StudentsFormApp.Controllers
     {
         private readonly StudentContext _context;
 
-
         public SurveysController(StudentContext context)
         {
             _context = context;

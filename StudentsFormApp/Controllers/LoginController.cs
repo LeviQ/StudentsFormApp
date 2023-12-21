@@ -46,7 +46,8 @@ namespace StudentsFormApp.Controllers
                         new Claim("AlbumNumber", student.AlbumNumber.ToString()),
                         new Claim("FieldOfStudy", student.FieldOfStudy),
                         new Claim("GroupID", student.GroupID.ToString()),
-                        new Claim("Semester", student.Semester.ToString())
+                        new Claim("Semester", student.Semester.ToString()),
+                        new Claim("IsSuperUser", student.IsSuperUser.ToString())
                     };
 
                     var tokenDescriptor = new SecurityTokenDescriptor
@@ -62,7 +63,12 @@ namespace StudentsFormApp.Controllers
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = tokenHandler.WriteToken(token);
 
-                    return Ok(new { Token = tokenString, Message = "Zalogowano pomyślnie." }); 
+                    return Ok(new 
+                    { 
+                        Token = tokenString, 
+                        Message = "Zalogowano pomyślnie." ,
+                        IsSuperUser = student.IsSuperUser
+                    }); 
                 }
                 else
                 {

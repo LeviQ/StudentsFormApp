@@ -4,6 +4,7 @@ import RegistrationForm from './components/RegistrationForm.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import HomePage from './components/HomePage.js';
+import AdminPage from './components/AdminPage.js';
 
 
 function App() {
@@ -17,6 +18,14 @@ function App() {
           element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute forAdmin={true}>
+              <AdminPage />
             </ProtectedRoute>
           }
         />
