@@ -5,7 +5,6 @@ import './AdminPage.css';
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 
-
 function Admin() {
   const navigate = useNavigate();
   const [semester, setSemester] = useState('');
@@ -55,17 +54,67 @@ function Admin() {
       responsive: true,
       plugins: {
         title: {
+          color: '#2c3e50',
           display: true,
           text: title,
+          font: {
+            size: 20,
+            weight: 900
+          }
+        },
+        legend: {
+          labels: {
+            color: '#2c3e50', 
+            font: {
+              size: 18, 
+            },
+          },
         },
       },
       scales: {
+        x: {
+          ticks: {
+            color: 'black', 
+            font: {
+              size: 12, 
+            },
+          },
+          title: {
+            display: true,
+            text: 'Ocena', 
+            color: '#2c3e50', 
+            font: {
+              size: 18,
+              weight: 'bold'  
+            },
+          },
+        },
         y: {
-          beginAtZero: true,
+          ticks: {
+            color: 'black', 
+            font: {
+              size: 12, 
+            },
+          },
+          title: {
+            display: true,
+            text: 'Ilość Studentów', 
+            color: '#2c3e50', 
+            font: {
+              size: 15,
+              weight: 'bold' 
+            },
+          },
         },
       },
+      animation: {
+        delay: (context) => {
+          return context.dataIndex * 300 + context.datasetIndex * 100;
+        }
+      }
     };
   };
+
 
   const countOccurrences = (arr) => {
     return arr.reduce((acc, curr) => {
@@ -77,7 +126,13 @@ function Admin() {
   return (
     <div className='Page-container-Admin'>
 
-      <div className='Header-Admin'>
+      <div className='Header-Admin' style={{
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
+                fontWeight: '800', 
+                color: '#2c3e50', 
+                textShadow: '1px 1px 2px rgba(0,0,0,0.1)', 
+                fontWeight: 'bold'
+                }}>
         Witaj w Panelu Administracyjnym Ankiet Studenckich
       <button onClick={handleHome} className="SurveyButton">
         Podgląd Ankiet
@@ -87,14 +142,37 @@ function Admin() {
       </button>
       </div>
     
-
       <div className='MiddleContainer'>
-      <div className="title-container">
+      <div className="title-container" style={{
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
+                fontSize: '24px', 
+                fontWeight: '600', 
+                color: '#2c3e50', 
+                textShadow: '1px 1px 2px rgba(0,0,0,0.1)', 
+                textAlign: 'center', 
+                fontWeight: 'bold'
+                }}>
         Wyszukaj Wyniki Ankiet po Semestrze i Grupie Studenckiej!
       </div>
       <div className="inputs-container">
-        <input type="number" placeholder="Semestr" value={semester} onChange={handleSemesterChange} />
-        <input type="" placeholder="Grupa Studencka" value={groupName} onChange={handleGroupChange} />
+        <input type="number" placeholder="Semestr" value={semester} onChange={handleSemesterChange} style={{
+                border: "3px solid #2c3e50",
+                borderRadius: '5px',
+                outline: 'none',
+                fontSize: '20px',
+                color: '#2c3e50',
+                backgroundColor: '#ecf0f1',
+                transition: 'border-color 0.3s'
+                }}/>
+        <input type="" placeholder="Grupa Studencka" value={groupName} onChange={handleGroupChange} style={{
+                border: "3px solid #2c3e50",
+                borderRadius: '5px',
+                outline: 'none',
+                fontSize: '20px',
+                color: '#2c3e50',
+                backgroundColor: '#ecf0f1',
+                transition: 'border-color 0.3s'
+                }}/>
       </div>
       <div className="button-container">
         <button onClick={fetchSurveyChartDataForAllOfferings}>Pobierz Wyniki Ankiet</button>
@@ -122,101 +200,122 @@ function Admin() {
 
           return (
             <div key={index}>
-              <h2>{chartData.SubjectName} prowadzone/a przez {chartData.InstructorTitle} {chartData.InstructorName} Rodzaj Zajęć: {chartData.ClassTypeName} </h2>
-              <div style={{ width: '98%', height: '100%'}} >
-              <Bar
+              <h2 style={{
+                marginBottom: '20px',
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
+                fontSize: '24px', 
+                fontWeight: '600', 
+                color: '#2c3e50', 
+                textShadow: '1px 1px 2px rgba(0,0,0,0.1)', 
+                textAlign: 'center', 
+                }}>
+                  Nazwa Przedmiotu: <strong>{chartData.SubjectName}</strong> <br /> Prowadzący: <strong>{chartData.InstructorTitle}</strong><strong>{chartData.InstructorName}</strong><br />
+                  Rodzaj Zajęć: <strong>{chartData.ClassTypeName}</strong> </h2>
+              <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Wyniki',
+                      label: 'Ocena Studentów',
                       data: chartDataArray1,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                      borderWidth: 2,
+                      borderColor: 'black',
                     },
                   ],
                 }}
-                options = {createChartOptions('Pytanie 1: Jak ogólnie oceniasz zajęcia w skali od 1 do 5?')}
+                options = {createChartOptions('Jak ogólnie oceniasz zajęcia w skali od 1 do 5?')}
               />
-              <Bar
+              <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Wyniki',
+                      label: 'Ocena Studentów',
                       data: chartDataArray2,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
-                    },
+                      borderWidth: 2,
+                      borderColor: 'black',                    },
                   ],
                 }}
-                options = {createChartOptions('Stwierdzenie 1. Na pierwszych zajęciach osoba prowadząca określiła, zgodnie z sylabusem, założenia i zasady zaliczania przedmiotu.')}
+                options = {createChartOptions('Na pierwszych zajęciach osoba prowadząca określiła, zgodnie z sylabusem, założenia i zasady zaliczania przedmiotu.')}
               />
-              <Bar
+              <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Wyniki',
+                      label: 'Ocena Studentów',
                       data: chartDataArray3,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                      borderWidth: 2,
+                      borderColor: 'black',
                     },
                   ],
                 }}
-                options = {createChartOptions('Stwierdzenie 2. Uzyskano od osoby prowadzącej odpowiedzi na pytania zadawane w czasie zajęć i/lub konsultacji.')}
+                options = {createChartOptions('Uzyskano od osoby prowadzącej odpowiedzi na pytania zadawane w czasie zajęć i/lub konsultacji.')}
               />
-               <Bar
+               <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Wyniki',
+                      label: 'Ocena Studentów',
                       data: chartDataArray4,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                      borderWidth: 2,
+                      borderColor: 'black',
                     },
                   ],
                 }}
-                options = {createChartOptions('Stwierdzenie 3. Osoby studiujące były traktowane przez osobę prowadzącą z szacunkiem i zgodnie z zasadą równego traktowania.')}
+                options = {createChartOptions('Osoby studiujące były traktowane przez osobę prowadzącą z szacunkiem i zgodnie z zasadą równego traktowania.')}
               />
-              <Bar
+              <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Wyniki',
+                      label: 'Ocena Studentów',
                       data: chartDataArray5,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                      borderWidth: 2,
+                      borderColor: 'black',
                     },
                   ],
                 }}
-                options = {createChartOptions('Stwierdzenie 4. Określone w sylabusie zasady zaliczenia przedmiotu były przestrzegane.')}
+                options = {createChartOptions('Określone w sylabusie zasady zaliczenia przedmiotu były przestrzegane.')}
               />
-              <Bar
+              <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Wyniki',
+                      label: 'Ocena Studentów',
                       data: chartDataArray6,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                      borderWidth: 2,
+                      borderColor: 'black',
                     },
                   ],
                 }}
-                options = {createChartOptions('Stwierdzenie 5. Prezentowany przez osobę prowadzącą materiał rozwinął moją wiedzę i/lub umiejętności.')}
+                options = {createChartOptions('Prezentowany przez osobę prowadzącą materiał rozwinął moją wiedzę i/lub umiejętności.')}
               />
-              <Bar
+              <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Wyniki',
+                      label: 'Ocena Studentów',
                       data: chartDataArray7,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                      borderWidth: 2,
+                      borderColor: 'black',
                     },
                   ],
                 }}
-                options = {createChartOptions('Stwierdzenie 6. Zajęcia oceniam jako interesujące.')}
+                options = {createChartOptions('Zajęcia oceniam jako interesujące.')}
               />
               </div>
-            </div>
           );
         })}
     </div>
