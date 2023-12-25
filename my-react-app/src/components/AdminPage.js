@@ -11,9 +11,16 @@ function Admin() {
   const [groupName, setgroupName] = useState('');
   const [offerings, setOfferings] = useState([]);
   const [allChartData, setAllChartData] = useState([]);
-  
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [filter, setFilter] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
 
-  const handleSemesterChange = (e) => setSemester(e.target.value);
+  const handleSemesterChange = (e) => {
+    const value = e.target.value;
+    if (value === "" || (/^\d+$/.test(value) && (value >= 1 && value <= 7))) {
+      setSemester(value);
+    }
+  };
   const handleGroupChange = (e) => setgroupName(e.target.value);
 
   const fetchSurveyChartDataForAllOfferings = async () => {
@@ -115,12 +122,39 @@ function Admin() {
     };
   };
 
-
   const countOccurrences = (arr) => {
     return arr.reduce((acc, curr) => {
       acc[curr] = (acc[curr] || 0) + 1;
       return acc;
     }, {});
+  };
+
+  const toggleFilterVisibility = () => {
+    setIsFilterVisible(!isFilterVisible);
+  };
+
+  const handleSearch = () => {
+    if (filter) {
+      const filtered = allChartData.filter(chartData => 
+        chartData.SubjectName.toLowerCase().includes(filter.toLowerCase())
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(allChartData);
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value);
+  };
+
+  const clearFilter = () => {
+    setFilter('');
+    setFilteredData(allChartData);
+  };
+
+  const hideFilter = () => {
+    setIsFilterVisible(false);
   };
 
   return (
@@ -155,14 +189,14 @@ function Admin() {
         Wyszukaj Wyniki Ankiet po Semestrze i Grupie Studenckiej!
       </div>
       <div className="inputs-container">
-        <input type="number" placeholder="Semestr" value={semester} onChange={handleSemesterChange} style={{
+        <input type="number" placeholder="Semestr" value={semester} onChange={handleSemesterChange} min='1' max='7' step ='1' style={{
                 border: "3px solid #2c3e50",
                 borderRadius: '5px',
                 outline: 'none',
                 fontSize: '20px',
                 color: '#2c3e50',
                 backgroundColor: '#ecf0f1',
-                transition: 'border-color 0.3s'
+                transition: 'border-color 0.3s',
                 }}/>
         <input type="" placeholder="Grupa Studencka" value={groupName} onChange={handleGroupChange} style={{
                 border: "3px solid #2c3e50",
@@ -177,10 +211,38 @@ function Admin() {
       <div className="button-container">
         <button onClick={fetchSurveyChartDataForAllOfferings}>Pobierz Wyniki Ankiet</button>
       </div>
+      <div className="button-container">
+        <button onClick={toggleFilterVisibility}>Filtrowanie</button>
       </div>
 
+      {isFilterVisible && (
+        <div className="filter-box">
+          <div className='filterbox-content'>
+          <input
+            type="text"
+            placeholder="Wyszukaj Przedmiot po nazwie"
+            value={filter}
+            onChange={handleFilterChange}
+            style={{
+              border: "3px solid #2c3e50",
+              borderRadius: '5px',
+              outline: 'none',
+              fontSize: '20px',
+              color: '#2c3e50',
+              backgroundColor: '#ecf0f1',
+              transition: 'border-color 0.3s'
+              }}
+          />
+          <button onClick={handleSearch}>Wyszukaj</button>
+          <button onClick={clearFilter}>Usuń filtr</button>
+          <button onClick={hideFilter}>Schowaj</button>
+          </div>
+        </div>
+      )}
+
+      </div>
       <div className="surveys-container-Admin">
-      {allChartData.map((chartData, index) => {
+      {(filter ? filteredData : allChartData).map((chartData, index) => {
           
           const answer1Occurrences = countOccurrences(chartData.Answer1Data);
           const answer2Occurrences = countOccurrences(chartData.Answer2Data);
@@ -209,14 +271,14 @@ function Admin() {
                 textShadow: '1px 1px 2px rgba(0,0,0,0.1)', 
                 textAlign: 'center', 
                 }}>
-                  Nazwa Przedmiotu: <strong>{chartData.SubjectName}</strong> <br /> Prowadzący: <strong>{chartData.InstructorTitle}</strong><strong>{chartData.InstructorName}</strong><br />
+                  Nazwa Przedmiotu: <strong>{chartData.SubjectName}</strong> <br /> Prowadzący: <strong>{chartData.InstructorTitle} </strong><strong>{chartData.InstructorName}</strong><br />
                   Rodzaj Zajęć: <strong>{chartData.ClassTypeName}</strong> </h2>
               <Bar style={{marginBottom:'35px'}}
                 data={{
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Ocena Studentów',
+                      label: 'Liczba Studentów',
                       data: chartDataArray1,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
                       borderWidth: 2,
@@ -231,7 +293,7 @@ function Admin() {
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Ocena Studentów',
+                      label: 'Liczba Studentów',
                       data: chartDataArray2,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
                       borderWidth: 2,
@@ -245,7 +307,7 @@ function Admin() {
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Ocena Studentów',
+                      label: 'Liczba Studentów',
                       data: chartDataArray3,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
                       borderWidth: 2,
@@ -260,7 +322,7 @@ function Admin() {
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Ocena Studentów',
+                      label: 'Liczba Studentów',
                       data: chartDataArray4,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
                       borderWidth: 2,
@@ -275,7 +337,7 @@ function Admin() {
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Ocena Studentów',
+                      label: 'Liczba Studentów',
                       data: chartDataArray5,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
                       borderWidth: 2,
@@ -290,7 +352,7 @@ function Admin() {
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Ocena Studentów',
+                      label: 'Liczba Studentów',
                       data: chartDataArray6,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
                       borderWidth: 2,
@@ -305,7 +367,7 @@ function Admin() {
                   labels: ['1', '2', '3', '4', '5'],
                   datasets: [
                     {
-                      label: 'Ocena Studentów',
+                      label: 'Liczba Studentów',
                       data: chartDataArray7,
                       backgroundColor: 'rgba(53, 162, 235, 0.5)',
                       borderWidth: 2,
@@ -315,6 +377,32 @@ function Admin() {
                 }}
                 options = {createChartOptions('Zajęcia oceniam jako interesujące.')}
               />
+              <div style={{
+                marginBottom: '30px',
+                fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
+                fontSize: '24px', 
+                fontWeight: '600', 
+                color: '#2c3e50', 
+                textShadow: '1px 1px 2px rgba(0,0,0,0.1)', 
+                textAlign: 'center',
+                maxHeight: '200px', 
+                overflowY: 'auto',
+                border: '3px solid rgba(53, 162, 235, 0.5)',
+                borderRadius: '5px',
+                boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+                padding: '15px'
+                }}>
+                  <strong>Odpowiedzi na pytania otwarte:</strong><br />
+                    {chartData.OpenAnswer.map((answer, index) => (
+                    <div key={index} style={{ 
+                    marginTop: '10px', 
+                    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
+                    fontSize: '24px', 
+                    fontWeight: '600', 
+                    color: '#2c3e50', 
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.1)', 
+                    textAlign: 'center', }}>{answer}</div>
+                  ))}</div>
               </div>
           );
         })}

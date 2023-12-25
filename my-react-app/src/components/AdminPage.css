@@ -27,7 +27,7 @@ body{
   
   .logoutButton {
     padding: 10px 20px;
-    background-color: #f44336; 
+    background-color: #f31d0e;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -38,13 +38,18 @@ body{
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    transition: background-color 0.3s, transform 0.3s;
+    transition: transform 0.3s;
     width: 8%;
+}
+
+.logoutButton:hover {
+  background-color: #c91002; 
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); 
 }
 
     .SurveyButton {
     padding: 10px 20px;
-    background-color: #f44336; 
+    background-color: rgba(53, 162, 235, 0.8); 
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -58,6 +63,11 @@ body{
     transition: background-color 0.3s, transform 0.3s;
     width: 10%;
     margin-right: -55vh;
+}
+
+.SurveyButton:hover {
+  background-color: rgba(13, 108, 172, 0.8);  
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); 
 }
 
 .MiddleContainer{
@@ -88,11 +98,11 @@ body{
 
 .title-container,
 .button-container {
-  width: 100%; /* Dostosuj szerokość zgodnie z potrzebą */
+  width: 100%; 
   display: flex;
   margin-bottom: 20px;
-  justify-content: center; /* Wyśrodkowanie dzieci */
-  gap: 20px; /* Odstęp między dziećmi */
+  justify-content: center; 
+  gap: 20px; 
   color: black;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -107,13 +117,13 @@ body{
 
 .button-container button{
   padding: 10px 20px;
-  background-color: #45a049; 
+  background-color: rgba(53, 162, 235, 0.7); 
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 20px;
   font-family: 'Open Sans', sans-serif;
-  font-weight: bold;
+  font-weight: 900;
   color: White;
   text-align: center;
   text-decoration: none;
@@ -123,6 +133,49 @@ body{
 }
 
 .button-container button:hover {
-  background-color: #45a049; /* Ciemniejszy kolor tła przy najechaniu */
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Cień dla efektu głębi */
+  background-color: rgba(53, 162, 235, 0.9); 
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); 
+}
+
+.filter-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.filterbox-content {
+  border-radius: 10px;
+  gap: 10px;
+  display: flex;
+  width: 60%;
+  align-items: center;
+}
+
+.filterbox-content button {
+  width: 20%;
+  border: none;
+  border-radius: 5px;
+  background-color: #2c3e50;
+  color: white;
+  font-size: 20px;
+  font-family: 'Open Sans', sans-serif;
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: #34495e;
+  font-weight: 900;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-top: -25px;
+}
+
+.filterbox-content button:hover {
+  background-color: #34495e;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); 
+}
+
+.filterbox-content button:active {
+  transform: scale(0.95);
 }
