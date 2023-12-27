@@ -11,6 +11,5 @@ namespace StudentsFormApp.Models
         [Key]
         public int ClassTypeID { get; set; }
         public string TypeName { get; set; } = string.Empty;
-        public virtual ICollection<CourseOffering>? CourseOfferings { get; set; }
     }
 }

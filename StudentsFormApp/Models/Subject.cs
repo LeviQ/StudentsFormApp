@@ -13,6 +13,5 @@ namespace StudentsFormApp.Models
         public int SubjectID { get; set; }
         public string SubjectName { get; set; } = string.Empty;
         public string FieldOfStudy { get; set; } = string.Empty;
-        public virtual ICollection<CourseOffering>? CourseOfferings { get; set; }
     }
 }

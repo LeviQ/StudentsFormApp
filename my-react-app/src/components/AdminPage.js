@@ -14,38 +14,45 @@ function Admin() {
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [filter, setFilter] = useState('');
   const [filteredData, setFilteredData] = useState([]);
-
-  const handleSemesterChange = (e) => {
-    const value = e.target.value;
-    if (value === "" || (/^\d+$/.test(value) && (value >= 1 && value <= 7))) {
-      setSemester(value);
-    }
-  };
-  const handleGroupChange = (e) => setgroupName(e.target.value);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loginSuccess, setloginSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const fetchSurveyChartDataForAllOfferings = async () => {
-    try {
-      const offeringsResponse = await axios.get(`http://localhost:5007/api/Offerings/GetOfferings`, {
-        params: { semester, groupName }
-      });
 
-      // Przechowuj dane wykresów dla wszystkich offerings
-      const allChartData = [];
-  
-      // Dla każdego offeringu pobierz dane wykresu
-      for (const offering of offeringsResponse.data) {
-        const chartDataResponse = await axios.get(`http://localhost:5007/api/SurveyChartData/GetSurveyChartData`, {
-          params: { offeringId: offering.OfferingID}
+    setError('');  
+    const allowedGroupsForLowerSemesters = ['1', '2', '3', '4', '5', '6', '7'];
+    const allowedGroupsForHigherSemesters = ['ISI-1', 'ISI-2', 'SIAG', 'TM', 'ISK'];
+
+    if (semester <= 4 && !allowedGroupsForLowerSemesters.includes(groupName)) {
+      setError('Wybrano niepoprawną grupę studencką dla semestru 1-4.');
+    } else if (semester > 4 && !allowedGroupsForHigherSemesters.includes(groupName)) {
+      setError('Wybrano niepoprawną grupę studencką dla semestru 5-7.');
+    } else {
+      try {
+        const offeringsResponse = await axios.get(`http://localhost:5007/api/Offerings/GetOfferings`, {
+          params: { semester, groupName }
         });
-        allChartData.push(chartDataResponse.data);
-      }
-
-      setAllChartData(allChartData);
   
-    } catch (error) {
-      console.error('Error fetching survey chart data for all offerings:', error);
-    }
-  };
+        // Przechowuj dane wykresów dla wszystkich offerings
+        const allChartData = [];
+    
+        // Dla każdego offeringu pobierz dane wykresu
+        for (const offering of offeringsResponse.data) {
+          const chartDataResponse = await axios.get(`http://localhost:5007/api/SurveyChartData/GetSurveyChartData`, {
+            params: { offeringId: offering.OfferingID}
+          });
+          allChartData.push(chartDataResponse.data);
+        }
+        setAllChartData(allChartData);
+    
+      } catch (error) {
+        console.error('Error fetching survey chart data for all offerings:', error);
+      }
+    console.log('Pobieranie wyników ankiety...');
+  }
+};
 
   const handleHome = () => {
     navigate('/home');
@@ -157,9 +164,159 @@ function Admin() {
     setIsFilterVisible(false);
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+    document.querySelector('.Header-Admin').classList.add('modal-blur');
+    document.querySelector('.MiddleContainer').classList.add('modal-blur');
+    document.querySelector('.surveys-container-Admin').classList.add('modal-blur');
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    document.querySelector('.Header-Admin').classList.remove('modal-blur');
+    document.querySelector('.MiddleContainer').classList.remove('modal-blur');
+    document.querySelector('.surveys-container-Admin').classList.remove('modal-blur');
+  };
+
+  const handleInstructorsExport = async () => {
+    const response = await fetch('http://localhost:5007/api/ExportData/export-instructors');
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'Instructors.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleSubjectsExport = async () => {
+    const response = await fetch('http://localhost:5007/api/ExportData/export-subjects');
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'Subjects.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleOfferingsExport = async () => {
+    const response = await fetch('http://localhost:5007/api/ExportData/export-offerings');
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'Offerings.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleStudentsGroupsExport = async () => {
+    const response = await fetch('http://localhost:5007/api/ExportData/export-studentgroups');
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'StudentGroups.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleClassTypesExport = async () => {
+    const response = await fetch('http://localhost:5007/api/ExportData/export-classtypes');
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'ClassTypes.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleFileSelect = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  
+  const handleInstructorImport = async () => {
+    const instructorImportData = new FormData();
+    instructorImportData.append('file', selectedFile);
+    try {
+      const response = await fetch('http://localhost:5007/api/ImportData/import-instructors', {
+        method: 'POST',
+        body: instructorImportData
+      });
+  
+      if (response.ok) {
+        setloginSuccess(true);
+        setTimeout(() => {
+          setloginSuccess(false);
+      }, 2500); 
+        console.log('Zaktualizowano Listę Prowadzących');
+      } else {
+        console.error('Nie udało się zaktualizować Listy Prowadzących');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleSubjectImport = async () => {
+    const subjectImportData = new FormData();
+    subjectImportData.append('file', selectedFile);
+    try {
+      const response = await fetch('http://localhost:5007/api/ImportData/import-subjects', {
+        method: 'POST',
+        body: subjectImportData
+      });
+  
+      if (response.ok) {
+        setloginSuccess(true);
+        setTimeout(() => {
+          setloginSuccess(false);
+      }, 2500); 
+        console.log('Zaktualizowano Listę Przedmiotów');
+      } else {
+        console.error('Nie udało się zaktualizować Listy Przedmiotów');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleOfferingImport = async () => {
+    const offeringImportData = new FormData();
+    offeringImportData.append('file', selectedFile);
+    try {
+      const response = await fetch('http://localhost:5007/api/ImportData/import-courseofferings', {
+        method: 'POST',
+        body: offeringImportData
+      });
+  
+      if (response.ok) {
+        setloginSuccess(true);
+        setTimeout(() => {
+          setloginSuccess(false);
+      }, 2500); 
+        console.log('Pomyślnie zaktualizowano Listę!');
+      } else {
+        console.error('Nie udało się zaktualizować Listy');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div className='Page-container-Admin'>
-
+      {loginSuccess && 
+            <div className={`success-message ${loginSuccess ? 'active' : ''}`}>
+                Zaktualizowano Pomyślnie!
+            </div>}
       <div className='Header-Admin' style={{
                 fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
                 fontWeight: '800', 
@@ -167,15 +324,56 @@ function Admin() {
                 textShadow: '1px 1px 2px rgba(0,0,0,0.1)', 
                 fontWeight: 'bold'
                 }}>
-        Witaj w Panelu Administracyjnym Ankiet Studenckich
-      <button onClick={handleHome} className="SurveyButton">
-        Podgląd Ankiet
-      </button>
-      <button onClick={handleLogout} className="logoutButton">
-        Wyloguj się
-      </button>
-      </div>
-    
+        <div style={{ flex: 1, textAlign: 'left' }}> 
+          Witaj w Panelu Administracyjnym Ankiet Studenckich
+        </div>
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <button onClick={handleOpenModal} className='UniversityButton'>
+            Aktualizuj Plan
+          </button>
+          <button onClick={handleHome} className="SurveyButton">
+            Podgląd Ankiet
+          </button>
+          <button onClick={handleLogout} className="logoutButton">
+            Wyloguj się
+          </button>
+        </div>
+        </div>
+
+      {isModalOpen && (
+        <div className="modal-Admin">
+          <div className="modal-content-Admin">
+            <span className="close" onClick={handleCloseModal} style={{ marginTop: '-20px', marginLeft: '890px'}}>&times;</span>
+
+            <div className="modal-section">
+            Aktualna Lista Prowadzących: <button onClick={handleInstructorsExport} className="ModalButton">Pobierz</button>
+            <input type="file" id="fileInput" onChange={handleFileSelect} style={{display: 'none'}}></input>
+            <label for="fileInput" class="ModalButton" style={{ backgroundColor: '#496683'}}> Przeglądaj </label>
+            <button onClick={handleInstructorImport} className="ModalButton" style={{ backgroundColor: '#2c3e50'}}>Aktualizuj</button>
+            </div>
+            <br />
+            <div className="modal-section">
+            Aktualna Lista Przedmiotów: <button onClick={handleSubjectsExport} className="ModalButton">Pobierz</button>
+            <input type="file" onChange={handleFileSelect} style={{display: 'none'}}></input>
+            <label for="fileInput" class="ModalButton" style={{ backgroundColor: '#496683'}}> Przeglądaj </label>
+            <button onClick={handleSubjectImport} className="ModalButton" style={{ backgroundColor: '#2c3e50'}}>Aktualizuj</button>
+            </div>
+            <br />
+            <div className="modal-section">
+            Aktualna Lista Przedmiotów i Prowadzących: <button onClick={handleOfferingsExport} className="ModalButton">Pobierz</button>
+            <input type="file" onChange={handleFileSelect} style={{display: 'none'}}></input>
+            <label for="fileInput" class="ModalButton" style={{ backgroundColor: '#496683'}}> Przeglądaj </label>
+            <button onClick={handleOfferingImport} className="ModalButton" style={{ backgroundColor: '#2c3e50'}}>Aktualizuj</button>
+            </div>
+            <br />
+            <div className="modal-section">
+            <button onClick={handleClassTypesExport} className="ModalButton">Pobierz Rodzaje Zajęć</button>
+            <button onClick={handleStudentsGroupsExport} className="ModalButton">Pobierz Grupy Studenckie</button>
+            </div>
+          </div>
+        </div>
+      )}
+  
       <div className='MiddleContainer'>
       <div className="title-container" style={{
                 fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", 
@@ -189,7 +387,7 @@ function Admin() {
         Wyszukaj Wyniki Ankiet po Semestrze i Grupie Studenckiej!
       </div>
       <div className="inputs-container">
-        <input type="number" placeholder="Semestr" value={semester} onChange={handleSemesterChange} min='1' max='7' step ='1' style={{
+        <input type="number" placeholder="Semestr" value={semester} min='1' max='7' step ='1' onChange={(e) => setSemester(e.target.value)}  style={{
                 border: "3px solid #2c3e50",
                 borderRadius: '5px',
                 outline: 'none',
@@ -198,7 +396,7 @@ function Admin() {
                 backgroundColor: '#ecf0f1',
                 transition: 'border-color 0.3s',
                 }}/>
-        <input type="" placeholder="Grupa Studencka" value={groupName} onChange={handleGroupChange} style={{
+        <input type="" placeholder="Grupa Studencka" value={groupName} onChange={(e) => setgroupName(e.target.value)}  style={{
                 border: "3px solid #2c3e50",
                 borderRadius: '5px',
                 outline: 'none',
@@ -207,6 +405,12 @@ function Admin() {
                 backgroundColor: '#ecf0f1',
                 transition: 'border-color 0.3s'
                 }}/>
+      {error && <div className="error-message" style={{
+                marginTop: '-220px',
+                fontSize: '18px',
+                height: '20px',
+                padding: '10px'
+                }}>{error}</div>}
       </div>
       <div className="button-container">
         <button onClick={fetchSurveyChartDataForAllOfferings}>Pobierz Wyniki Ankiet</button>

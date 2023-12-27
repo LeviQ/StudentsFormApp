@@ -93,13 +93,13 @@ function Home() {
 
   return (
     <div className='Page-container'>
-      {showSuccessMessage && <div className="success-message2">Ankieta została pomyślnie przesłana!</div>}
       <div className='Header'>
         Witaj na Platformie Ankiet Studenckich!
       <button onClick={handleLogout} className="logoutButton">
         Wyloguj się
       </button>
       </div>
+      {showSuccessMessage && <div className="success-message">Ankieta została pomyślnie przesłana!</div>}
     <div className="surveys-container">
       {surveys.length > 0 ? (
         surveys.map((survey) => (
