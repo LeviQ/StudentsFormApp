@@ -218,8 +218,8 @@ a:hover {
 
 .eye-icon {
     position: absolute;
-    top: 40%;
-    right: 10%; 
+    top: 32%;
+    right: 16%; 
     transform: translateY(-50%);
 }
 

@@ -6,9 +6,8 @@ import './HomePage.css';
 function Home() {
   const [surveys, setSurveys] = useState([]);
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [completedSurveys, setCompletedSurveys] = useState([]);
   const [selectedSurvey, setSelectedSurvey] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   
@@ -111,7 +110,7 @@ function Home() {
           </div>
         ))
       ) : (
-        <p>Brak ankiet do wypełnienia.</p>
+        <p>Dziękujemy za uzupełnienie wszystkich ankiet!.</p>
       )}
     </div>
     {isModalOpen && (

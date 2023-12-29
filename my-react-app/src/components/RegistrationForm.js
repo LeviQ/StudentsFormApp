@@ -46,15 +46,30 @@ function RegistrationForm() {
           errors.FieldOfStudy = "Wybierz Informatykę lub Informatykę i Ekonometrię.";
         }
     
-        // Walidacja roku studiów
-        const validGroupNames = ["1","2","3","4","5","6","7","ISI-1","ISI-2","SIAG","TM"];
-        if (!validGroupNames.includes(studentData.GroupName)) {
-          errors.GroupName = "Wpisz poprawną Grupę Studencką";
-        }
+        if (studentData.Semester >= 1 && studentData.Semester <= 4) {
+            // Dla semestrów 1-4, dozwolone są grupy 1-7
+            const validGroupNamesForLowerSemesters = ["1","2","3","4","5","6","7"];
+            if (!validGroupNamesForLowerSemesters.includes(studentData.GroupName)) {
+              errors.GroupName = "Wpisz poprawną Grupę Studencką dla semestrów 1-4.";
+            }
+          } else if (studentData.Semester >= 5 && studentData.Semester <= 7) {
+            // Dla semestrów 5-7, dozwolone są grupy ISI-1, ISI-2, SIAG, TM, ISK
+            const validGroupNamesForHigherSemesters = ["ISI-1","ISI-2","SIAG","TM","ISK"];
+            if (!validGroupNamesForHigherSemesters.includes(studentData.GroupName)) {
+              errors.GroupName = "Wpisz poprawną Grupę Studencką dla semestrów 5-7.";
+            }
+          } else {
+            // Jeśli semestr nie jest w zakresie 1-7, zwróć błąd
+            errors.Semester = "Semestr powinien być w zakresie od 1 do 7.";
+          }
     
         // Walidacja semestru
         if (studentData.Semester < 1 || studentData.Semester > 7) {
           errors.Semester = "Semestr powinien być w zakresie od 1 do 7.";
+        }
+
+        if (studentData.GroupName === ''){
+            errors.GroupName = "Uzupełnij Grupę Studencką";
         }
     
         setErrors(errors);
@@ -124,6 +139,7 @@ function RegistrationForm() {
                     />
                     {errors.AlbumNumber && <p className="error">{errors.AlbumNumber}</p>}
                     <h3>Hasło</h3>
+                    <div style={{ position: 'relative'}}>
                     <input
                         type={isPasswordVisible ? "text" : "password"} 
                         value={studentData.StudentPassword}
@@ -136,6 +152,7 @@ function RegistrationForm() {
                         style={{ cursor: "pointer", color: "#2C3E50", fontSize: "1.3em"}}
                         className="eye-icon"
                     />
+                    </div>
                     <h3>Kierunek Studiów</h3>
                     <input
                         value={studentData.FieldOfStudy}
@@ -157,6 +174,7 @@ function RegistrationForm() {
                         value={studentData.Semester}
                         onChange={e => setStudentData({ ...studentData, Semester: e.target.value })}
                         placeholder="Wybierz Semestr"
+                        min='1' max='7' step ='1'
                     />
                     {errors.Semester && <p className="error">{errors.Semester}</p>}
                     <h1>Posiadasz już konto? <a href="/login">Zaloguj się</a></h1>
