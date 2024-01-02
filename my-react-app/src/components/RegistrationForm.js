@@ -36,8 +36,10 @@ function RegistrationForm() {
         let errors = {};
     
         // Walidacja numeru albumu
-        if (studentData.AlbumNumber.length < 3 || studentData.AlbumNumber.length > 7) {
-          errors.AlbumNumber = "Numer albumu powinien zawierać od 3 do 7 cyfr.";
+        if (!/^[0-9]+$/.test(studentData.AlbumNumber)) {
+            errors.AlbumNumber = "Numer albumu powinien zawierać tylko cyfry.";
+        } else if (studentData.AlbumNumber.length < 3 || studentData.AlbumNumber.length > 7) {
+            errors.AlbumNumber = "Numer albumu powinien zawierać od 3 do 7 cyfr.";
         }
     
         // Walidacja kierunku studiów

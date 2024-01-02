@@ -32,8 +32,6 @@ namespace StudentsFormApp.Controllers
         {
             // Pobranie ID zalogowanego studenta z tokena JWT
 
-            //var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
             var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault().Split(" ").Last();
 
             var tokenhandler = new JwtSecurityTokenHandler();
